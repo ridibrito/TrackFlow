@@ -2,9 +2,12 @@
   "dependencies": {
     "@headlessui/react": "^2.2.4",
     "@tailwindcss/postcss": "^4.1.10",
+    "@types/cheerio": "^0.22.35",
     "@vercel/analytics": "^1.5.0",
+    "cheerio": "^1.1.0",
     "postcss": "^8.5.6",
     "react-hot-toast": "^2.5.2",
+    "react-timeago": "^8.2.0",
     "tailwindcss": "^4.1.10"
   }
 }
