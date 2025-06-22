@@ -9,7 +9,13 @@ import { PencilIcon, CheckIcon, XMarkIcon, ExclamationTriangleIcon, TrashIcon, I
 import { useRouter, useParams } from 'next/navigation';
 import { FC, Dispatch, SetStateAction } from 'react';
 import AIAgent from '@/components/projects/AIAgent';
+import GtmConfig from '@/components/projects/GtmConfig';
+import PlatformConfig from '@/components/projects/PlatformConfig';
+import ServerSideConfig from '@/components/projects/ServerSideConfig';
+import ServerSideCodeGenerator from '@/components/projects/ServerSideCodeGenerator';
 import Image from 'next/image';
+import CodeGenerator from '@/components/projects/CodeGenerator';
+import ConversionEvents from '@/components/projects/ConversionEvents';
 
 // Modal de Confirmação de Exclusão
 const DeleteConfirmationModal = ({
@@ -451,6 +457,47 @@ export default function ProjectDetailsPage() {
     <div className="container mx-auto px-4 py-8">
       <ProjectHeader {...headerProps} />
       <AnalysisCard project={project} />
+      
+      {/* Seção 1: Configuração GTM (Primeiro) */}
+      <div className="mt-8">
+        <GtmConfig project={project} />
+      </div>
+      
+      {/* Seção 2: Configuração de Plataformas (Após GTM) */}
+      {project.gtm_id && (
+        <div className="mt-8">
+          <PlatformConfig project={project} />
+        </div>
+      )}
+      
+      {/* Seção 3: Eventos de Conversão (Após configuração de plataformas) */}
+      {project.gtm_id && (
+        <div className="mt-8">
+          <ConversionEvents project={project} />
+        </div>
+      )}
+      
+      {/* Seção 4: Geração de Código (Após configuração de plataformas) */}
+      {project.gtm_id && (
+        <div className="mt-8">
+          <CodeGenerator project={project} />
+        </div>
+      )}
+      
+      {/* Seção 5: Container Server-Side (Opcional, após GTM) */}
+      {project.gtm_id && (
+        <div className="mt-8 space-y-6">
+          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-purple-800 mb-2">🚀 Melhore a Performance (Opcional)</h3>
+            <p className="text-sm text-purple-700">
+              Após configurar seu container web, você pode ativar o container server-side para melhorar a performance e precisão do rastreamento.
+            </p>
+          </div>
+          <ServerSideConfig project={project} />
+          <ServerSideCodeGenerator project={project} />
+        </div>
+      )}
+      
       <div className="mt-8">
         <AIAgent project={project} onComplete={handleAIAgentComplete} />
       </div>

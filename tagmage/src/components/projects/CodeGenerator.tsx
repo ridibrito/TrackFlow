@@ -15,7 +15,7 @@ const CodeSnippet = ({ title, code, language = 'javascript' }: { title: string; 
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(null), 2000);
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Erro ao copiar código:', err);
     }
@@ -27,7 +27,7 @@ const CodeSnippet = ({ title, code, language = 'javascript' }: { title: string; 
             <p className="text-sm font-semibold text-gray-300">{title}</p>
             <button
                 onClick={copyToClipboard}
-                className="flex items-center space-x-2 px-3 py-1 text-xs font-medium text-white bg-gray-600 hover:bg-gray-500 rounded"
+                className="flex items-center space-x-2 px-3 py-1 text-xs font-medium text-white bg-gray-600 hover:bg-gray-500 rounded cursor-pointer"
             >
                 {copied ? <CheckCircleIcon className="h-4 w-4 text-green-400" /> : <DocumentDuplicateIcon className="h-4 w-4" />}
                 <span>{copied ? 'Copiado!' : 'Copiar'}</span>
@@ -113,7 +113,7 @@ window.dataLayer.push({
       <div className="border-t border-gray-200">
         {/* Seção GTM */}
         <div className="border-b border-gray-200">
-            <button onClick={() => toggleSection('gtm')} className="w-full flex justify-between items-center p-4 hover:bg-gray-50">
+            <button onClick={() => toggleSection('gtm')} className="w-full flex justify-between items-center p-4 hover:bg-gray-50 cursor-pointer">
                 <span className="font-semibold text-gray-800">1. Script Principal do GTM</span>
                 {openSection === 'gtm' ? <ChevronDownIcon className="h-5 w-5 text-gray-500"/> : <ChevronRightIcon className="h-5 w-5 text-gray-500"/>}
             </button>
@@ -130,7 +130,7 @@ window.dataLayer.push({
 
         {/* Seção Eventos de Conversão */}
         <div className="border-b border-gray-200">
-            <button onClick={() => toggleSection('events')} className="w-full flex justify-between items-center p-4 hover:bg-gray-50">
+            <button onClick={() => toggleSection('events')} className="w-full flex justify-between items-center p-4 hover:bg-gray-50 cursor-pointer">
                 <span className="font-semibold text-gray-800">2. Snippets de Eventos de Conversão</span>
                 {openSection === 'events' ? <ChevronDownIcon className="h-5 w-5 text-gray-500"/> : <ChevronRightIcon className="h-5 w-5 text-gray-500"/>}
             </button>

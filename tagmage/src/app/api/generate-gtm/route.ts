@@ -106,9 +106,7 @@ Retorne um JSON estruturado com:
 Seja específico e prático.`;
 
   try {
-    const result = await geminiService.model.generateContent(prompt);
-    const response = await result.response;
-    const jsonText = response.text();
+    const jsonText = await geminiService.generateContent(prompt);
     
     // Tentar extrair JSON da resposta
     const jsonMatch = jsonText.match(/\{[\s\S]*\}/);

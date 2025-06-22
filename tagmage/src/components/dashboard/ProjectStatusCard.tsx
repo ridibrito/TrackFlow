@@ -58,7 +58,7 @@ export default function ProjectStatusCard({ project }: ProjectStatusCardProps) {
                 </div>
               ) : (
                 <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-xl font-bold text-gray-500">
-                  {project.name.charAt(0).toUpperCase()}
+                  {(project.name || 'P').charAt(0).toUpperCase()}
                 </div>
               )}
             <div>

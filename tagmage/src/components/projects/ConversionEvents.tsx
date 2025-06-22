@@ -59,10 +59,10 @@ const EventForm = ({
         />
       </div>
       <div className="flex justify-end space-x-3">
-        <button onClick={onCancel} disabled={isSaving} className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50">
+        <button onClick={onCancel} disabled={isSaving} className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 cursor-pointer">
             <XMarkIcon className="h-4 w-4 mr-1.5"/> Cancelar
         </button>
-        <button onClick={handleSave} disabled={isSaving} className="flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+        <button onClick={handleSave} disabled={isSaving} className="flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
             {isSaving ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -115,10 +115,10 @@ const DeleteEventConfirmationModal = ({
             </div>
           </div>
           <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-            <button type="button" onClick={onConfirm} disabled={isDeleting} className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-red-400">
+            <button type="button" onClick={onConfirm} disabled={isDeleting} className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-red-400 cursor-pointer">
               {isDeleting ? 'Excluindo...' : 'Excluir'}
             </button>
-            <button type="button" onClick={onClose} disabled={isDeleting} className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+            <button type="button" onClick={onClose} disabled={isDeleting} className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 cursor-pointer">
               Cancelar
             </button>
           </div>
@@ -223,7 +223,7 @@ export default function ConversionEvents({ project }: ConversionEventsProps) {
   return (
     <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
       <button 
-        className="w-full flex items-center justify-between p-6 md:p-8 hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between p-6 md:p-8 hover:bg-gray-50 transition-colors cursor-pointer"
         onClick={() => setIsMainAccordionOpen(!isMainAccordionOpen)}
       >
         <div className="flex items-center space-x-3">
@@ -254,14 +254,14 @@ export default function ConversionEvents({ project }: ConversionEventsProps) {
                     <button
                         onClick={() => setEditingEvent(event)}
                         disabled={isSubmitting}
-                        className="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-md disabled:opacity-50"
+                        className="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-md disabled:opacity-50 cursor-pointer"
                       >
                         <PencilIcon className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleRemoveEvent(event.id)}
                       disabled={isSubmitting}
-                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md disabled:opacity-50"
+                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md disabled:opacity-50 cursor-pointer"
                     >
                       <TrashIcon className="h-4 w-4" />
                     </button>

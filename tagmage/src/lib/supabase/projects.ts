@@ -12,15 +12,24 @@ export interface Project {
   client_logo_url?: string | null;
   gtm_id?: string | null;
   ga4_id?: string | null;
+  ga4_measurement_id?: string | null;
   google_ads_id?: string | null;
   google_ads_label?: string | null;
+  google_ads_customer_id?: string | null;
   meta_pixel_id?: string | null;
+  meta_ads_id?: string | null;
   tiktok_pixel_id?: string | null;
+  tiktok_ads_id?: string | null;
   linkedin_insight_tag_id?: string | null;
+  linkedin_ads_id?: string | null;
   business_type?: string | null;
   existing_tags?: string[] | null;
   site_analysis_data?: any | null;
-  google_ads_customer_id?: string | null;
+  conversion_events?: any[] | null;
+  // Campos do Stape.io
+  stape_container_id?: string | null;
+  stape_domain?: string | null;
+  stape_api_key?: string | null;
 }
 
 export interface ConversionEvent {

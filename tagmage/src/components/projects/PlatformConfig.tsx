@@ -79,7 +79,7 @@ const platforms = [
 ];
 
 export default function PlatformConfig({ project }: PlatformConfigProps) {
-  const { user, session, signInWithGoogleForGtm } = useAuth();
+  const { user, session, signInWithGooglePopup } = useAuth();
   const router = useRouter();
   
   const initialConfigsState = {
@@ -140,63 +140,65 @@ export default function PlatformConfig({ project }: PlatformConfigProps) {
   };
 
   const handleConfigureTags = async () => {
-    // Marcador para o retorno do OAuth
-    sessionStorage.setItem('gtmConfigureTagsProjectId', project.id);
     setIsConfiguring(true);
     startTimer();
     setError('');
     
-    // Inicia o fluxo de autenticação para garantir um provider_token
-    const { error: authError } = await signInWithGoogleForGtm();
+    try {
+      // Usar popup para autenticação
+      const { error: authError } = await signInWithGooglePopup([
+        'https://www.googleapis.com/auth/tagmanager.edit.containers',
+        'https://www.googleapis.com/auth/tagmanager.manage.accounts',
+        'https://www.googleapis.com/auth/adsense.readonly',
+        'https://www.googleapis.com/auth/analytics.readonly',
+        'https://www.googleapis.com/auth/adwords'
+      ]);
 
-    if (authError) {
-      setError(`Erro de autenticação: ${authError.message}`);
+      if (authError) {
+        throw new Error(`Erro de autenticação: ${authError.message}`);
+      }
+
+      // Aguardar a sessão ser atualizada
+      
+    } catch (err: any) {
+      setError(err.message);
       setIsConfiguring(false);
       stopTimer();
-      sessionStorage.removeItem('gtmConfigureTagsProjectId');
     }
   };
 
+  // Verificar quando a sessão é atualizada após o popup
   useEffect(() => {
-    const configureTagsProjectId = sessionStorage.getItem('gtmConfigureTagsProjectId');
-    
-    // Verifica se voltamos do OAuth para este projeto e se temos o token
-    if (configureTagsProjectId === project.id && session?.provider_token) {
-      
-      sessionStorage.removeItem('gtmConfigureTagsProjectId');
-      
-      const configureTagsApiCall = async () => {
-        // O estado já foi definido em handleConfigureTags, mas garantimos aqui
-        setIsConfiguring(true); 
-        startTimer();
-        setError('');
-        setSuccess('');
-
-        try {
-          const response = await fetch('/api/gtm/configure-tags', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ projectId: project.id }),
-          });
-
-          const result = await response.json();
-          if (!response.ok) throw new Error(result.error || 'Falha ao configurar as tags.');
-
-          setSuccess('Tags configuradas e publicadas com sucesso!');
-          router.refresh();
-
-        } catch (err: any) {
-          setError(err.message);
-        } finally {
-          setIsConfiguring(false);
-          stopTimer();
-          setTimeout(() => setSuccess(''), 4000);
-        }
-      };
-
-      configureTagsApiCall();
+    if (isConfiguring && session?.provider_token) {
+      // Sessão atualizada, configurar as tags
+      configureTagsAfterAuth();
     }
-  }, [session, project.id, router]);
+  }, [session, isConfiguring]);
+
+  const configureTagsAfterAuth = async () => {
+    if (!session?.provider_token) return;
+
+    try {
+      const response = await fetch('/api/gtm/configure-tags', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId: project.id }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Falha ao configurar as tags.');
+
+      setSuccess('Tags configuradas e publicadas com sucesso!');
+      router.refresh();
+
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsConfiguring(false);
+      stopTimer();
+      setTimeout(() => setSuccess(''), 4000);
+    }
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setConfigs(prev => ({

@@ -104,14 +104,14 @@ export default function ProjectResultCard({ result, onViewProject, onViewAllProj
             <div className="flex space-x-4">
               <button
                 onClick={onViewProject}
-                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 flex items-center justify-center"
+                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 flex items-center justify-center cursor-pointer"
               >
                 <EyeIcon className="w-5 h-5 mr-2" />
                 Ver Projeto
               </button>
               <button
                 onClick={onViewAllProjects}
-                className="flex-1 bg-gray-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-700 flex items-center justify-center"
+                className="flex-1 bg-gray-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-700 flex items-center justify-center cursor-pointer"
               >
                 Ver Todos os Projetos
               </button>
@@ -258,7 +258,7 @@ export default function ProjectResultCard({ result, onViewProject, onViewAllProj
                     <h5 className="font-medium text-gray-700">Snippet GTM</h5>
                     <button
                       onClick={() => copyToClipboard(result.implementationCodes.gtmSnippet, 'gtm')}
-                      className="flex items-center text-sm text-blue-600 hover:text-blue-700"
+                      className="flex items-center text-sm text-blue-600 hover:text-blue-700 cursor-pointer"
                     >
                       <DocumentDuplicateIcon className="w-4 h-4 mr-1" />
                       {copied === 'gtm' ? 'Copiado!' : 'Copiar'}
@@ -274,7 +274,7 @@ export default function ProjectResultCard({ result, onViewProject, onViewAllProj
                     <h5 className="font-medium text-gray-700">DataLayer</h5>
                     <button
                       onClick={() => copyToClipboard(result.implementationCodes.dataLayer, 'dataLayer')}
-                      className="flex items-center text-sm text-blue-600 hover:text-blue-700"
+                      className="flex items-center text-sm text-blue-600 hover:text-blue-700 cursor-pointer"
                     >
                       <DocumentDuplicateIcon className="w-4 h-4 mr-1" />
                       {copied === 'dataLayer' ? 'Copiado!' : 'Copiar'}
@@ -313,7 +313,7 @@ export default function ProjectResultCard({ result, onViewProject, onViewAllProj
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center ${
+                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center cursor-pointer ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'

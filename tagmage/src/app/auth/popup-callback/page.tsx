@@ -1,30 +1,45 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-export default function PopupCallbackPage() {
-  const searchParams = useSearchParams();
+export default function PopupCallback() {
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    const error = searchParams.get('error');
+    const handlePopupCallback = async () => {
+      try {
+        // Trocar o código pela sessão
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Erro na autenticação:', error);
+          window.close();
+          return;
+        }
 
-    if (window.opener) {
-      if (error) {
-        window.opener.postMessage({ type: 'auth-error', error }, window.location.origin);
-      } else if (code) {
-        // We can't send the full session, but we can signal success.
-        // The main window will then re-fetch the session.
-        window.opener.postMessage({ type: 'auth-success' }, window.location.origin);
+        if (session) {
+          // Autenticação bem-sucedida, fechar o popup
+          window.close();
+        } else {
+          window.close();
+        }
+      } catch (error) {
+        console.error('Erro no callback:', error);
+        window.close();
       }
-      window.close();
-    }
-  }, [searchParams]);
+    };
+
+    handlePopupCallback();
+  }, [supabase.auth]);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <p className="text-gray-700">Autenticando, por favor aguarde...</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 mb-2">Conectando com Google...</p>
+        <p className="text-sm text-gray-500">Esta janela fechará automaticamente.</p>
+      </div>
     </div>
   );
 } 

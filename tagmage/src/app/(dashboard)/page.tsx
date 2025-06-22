@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getProjectsForUser, Project } from '@/lib/supabase/projects';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import ProjectStatusCard from '@/components/dashboard/ProjectStatusCard';
 import Link from 'next/link';
 import RecentActivityCard from '@/components/dashboard/RecentActivityCard';
@@ -50,9 +49,9 @@ export default function DashboardPage() {
   const warningCount = projectsWithStatus.filter(p => p.status === 'warning').length;
 
   const chartData = [
-    { name: 'OK', value: 5 },
-    { name: 'Warning', value: 2 },
-    { name: 'Attention', value: 1 },
+    { name: 'OK', value: 5, color: '#22c55e' },
+    { name: 'Warning', value: 2, color: '#f59e0b' },
+    { name: 'Attention', value: 1, color: '#ef4444' },
   ];
 
   if (loading) {
@@ -66,11 +65,6 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <DashboardHeader 
-        projectCount={projects.length} 
-        attentionCount={attentionCount} 
-      />
-
       {projects.length > 0 ? (
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content - Project Cards */}
@@ -86,7 +80,7 @@ export default function DashboardPage() {
           {/* Sidebar - Charts and Activity */}
           <div className="space-y-8">
             <ProjectsStatusChart data={chartData} />
-            <RecentActivityCard />
+            <RecentActivityCard projects={projectsWithStatus} />
           </div>
         </div>
       ) : (

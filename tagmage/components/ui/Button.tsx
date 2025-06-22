@@ -13,7 +13,7 @@ export function Button({
   className = '',
   ...props 
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer';
   
   const variantClasses = {
     primary: 'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500',

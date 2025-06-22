@@ -27,6 +27,7 @@ const NotConfiguredState = ({ onCreate, isCreating, timer }: { onCreate: () => v
       O primeiro passo é criar um contêiner no Google Tag Manager.
       Você precisará autenticar com sua conta Google.
     </p>
+    
     <div className="mt-6">
       {isCreating ? (
         <div className="flex items-center justify-center space-x-2">
@@ -69,12 +70,13 @@ const ConfiguredState = ({ project }: { project: Project }) => (
 );
 
 export default function GtmConfig({ project }: GtmConfigProps) {
-  const { session, signInWithGoogleForGtm } = useAuth();
+  const { session, signInWithGooglePopup } = useAuth();
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   const [timer, setTimer] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const popupRef = useRef<Window | null>(null);
 
   const startTimer = () => {
     setTimer(0);
@@ -92,54 +94,66 @@ export default function GtmConfig({ project }: GtmConfigProps) {
   };
 
   const handleCreateContainer = async () => {
-    sessionStorage.setItem('gtmCreationProjectId', project.id);
     setIsCreating(true);
     startTimer();
     setError('');
     
-    const { error: authError } = await signInWithGoogleForGtm();
+    try {
+      // Usar popup para autenticação
+      const { error: authError } = await signInWithGooglePopup([
+        'https://www.googleapis.com/auth/tagmanager.edit.containers',
+        'https://www.googleapis.com/auth/tagmanager.manage.accounts',
+        'https://www.googleapis.com/auth/adsense.readonly',
+        'https://www.googleapis.com/auth/analytics.readonly',
+        'https://www.googleapis.com/auth/adwords'
+      ]);
 
-    if (authError) {
-      setError(`Erro de autenticação: ${authError.message}`);
+      if (authError) {
+        throw new Error(`Erro de autenticação: ${authError.message}`);
+      }
+
+      // O popup será gerenciado pelo AuthContext
+      // Vamos aguardar a sessão ser atualizada
+      
+    } catch (err: any) {
+      setError(err.message);
       setIsCreating(false);
       stopTimer();
-      sessionStorage.removeItem('gtmCreationProjectId');
     }
   };
 
+  // Verificar quando a sessão é atualizada após o popup
   useEffect(() => {
-    const gtmCreationProjectId = sessionStorage.getItem('gtmCreationProjectId');
-    
-    if (gtmCreationProjectId === project.id && session?.provider_token) {
-      sessionStorage.removeItem('gtmCreationProjectId');
-      setIsCreating(true);
-      startTimer();
-      setError('');
-
-      const createContainerApiCall = async () => {
-        try {
-          const response = await fetch('/api/gtm/create-container', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              projectId: project.id,
-              providerToken: session.provider_token 
-            }),
-          });
-          const result = await response.json();
-          if (!response.ok) throw new Error(result.error || 'Falha ao criar o contêiner.');
-          router.refresh();
-        } catch (err: any) {
-          setError(err.message);
-        } finally {
-          setIsCreating(false);
-          stopTimer();
-        }
-      };
-
-      createContainerApiCall();
+    if (isCreating && session?.provider_token) {
+      // Sessão atualizada, criar o container
+      createContainerAfterAuth();
     }
-  }, [session, project.id, router]);
+  }, [session, isCreating]);
+
+  const createContainerAfterAuth = async () => {
+    if (!session?.provider_token) return;
+
+    try {
+      const response = await fetch('/api/gtm/create-container', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          projectId: project.id,
+          providerToken: session.provider_token 
+        }),
+      });
+      
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Falha ao criar o contêiner.');
+      
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsCreating(false);
+      stopTimer();
+    }
+  };
 
   const isCompleted = !!project.gtm_id;
 

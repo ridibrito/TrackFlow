@@ -17,8 +17,6 @@ export interface AuthContextType {
   signInWithSocial: (provider: Provider) => Promise<{ error: AuthError | null }>;
   signInWithGoogle: (scopes: string[], redirectUrl?: string) => Promise<{ error: AuthError | null; }>;
   signInWithGooglePopup: (scopes: string[]) => Promise<{ error: AuthError | null; }>;
-  /** @deprecated Use signInWithGoogle(scopes) instead */
-  signInWithGoogleForGtm: () => Promise<{ error: AuthError | null; }>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -137,31 +135,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     if (data.url) {
-      const popup = window.open(data.url, 'google-auth', 'width=600,height=700');
-      // A lógica para ouvir o popup será implementada no componente que o chama
+      return new Promise<{ error: AuthError | null }>((resolve) => {
+        const popup = window.open(data.url, 'google-auth', 'width=600,height=700,scrollbars=yes,resizable=yes');
+        
+        if (!popup) {
+          resolve({ error: { message: 'Popup bloqueado. Permita popups para este site.' } as AuthError });
+          return;
+        }
+
+        // Verificar se o popup foi fechado
+        const checkClosed = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(checkClosed);
+            clearInterval(checkAuth);
+            resolve({ error: { message: 'Autenticação cancelada.' } as AuthError });
+          }
+        }, 1000);
+
+        // Verificar se a autenticação foi concluída
+        const checkAuth = setInterval(async () => {
+          try {
+            const { data: { session: currentSession } } = await supabase.auth.getSession();
+            if (currentSession?.provider_token) {
+              clearInterval(checkClosed);
+              clearInterval(checkAuth);
+              popup.close();
+              resolve({ error: null });
+            }
+          } catch (err) {
+            // Continuar verificando
+          }
+        }, 500);
+
+        // Timeout após 5 minutos
+        setTimeout(() => {
+          clearInterval(checkClosed);
+          clearInterval(checkAuth);
+          popup.close();
+          resolve({ error: { message: 'Tempo limite excedido.' } as AuthError });
+        }, 300000);
+      });
     }
     
     return { error: null };
-  };
-
-  const signInWithGoogleForGtm = async () => {
-    // Salvando a URL atual antes de redirecionar
-    localStorage.setItem('post_auth_redirect', window.location.pathname);
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        scopes: [
-          'https://www.googleapis.com/auth/tagmanager.edit.containers',
-          'https://www.googleapis.com/auth/tagmanager.manage.accounts',
-          'https://www.googleapis.com/auth/adsense.readonly',
-          'https://www.googleapis.com/auth/analytics.readonly',
-          'https://www.googleapis.com/auth/adwords'
-        ].join(' '),
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    return { error };
   };
 
   const value = {
@@ -177,7 +193,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signInWithSocial,
     signInWithGoogle,
     signInWithGooglePopup,
-    signInWithGoogleForGtm,
   };
 
   return (

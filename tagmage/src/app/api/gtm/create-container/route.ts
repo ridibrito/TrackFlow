@@ -37,23 +37,16 @@ export async function POST(request: Request) {
         throw new Error('Could not retrieve GTM accounts.');
     }
 
-    // 4. Encontrar ou criar uma conta para o Tag Mage
-    let tagmageAccount = accounts.find(acc => acc.name === 'Tag Mage [Managed]');
-    if (!tagmageAccount) {
-        const { data: newAccount } = await tagmanager.accounts.create({
-            requestBody: { name: 'Tag Mage [Managed]' }
-        });
-        if (!newAccount) throw new Error('Failed to create GTM account.');
-        tagmageAccount = newAccount;
-    }
+    // 4. Encontrar a primeira conta GTM disponível do usuário
+    const firstAccount = accounts[0];
 
-    if (!tagmageAccount?.accountId) {
-        throw new Error('Could not get Tag Mage GTM account ID.');
+    if (!firstAccount?.accountId) {
+        throw new Error('Nenhuma conta GTM encontrada. Por favor, crie uma conta no Google Tag Manager primeiro.');
     }
     
-    // 5. Criar o contêiner
+    // 5. Criar o contêiner na primeira conta encontrada
     const { data: newContainer } = await tagmanager.accounts.containers.create({
-        parent: `accounts/${tagmageAccount.accountId}`,
+        parent: `accounts/${firstAccount.accountId}`,
         requestBody: {
             name: project.name,
             usageContext: ['web']
@@ -64,10 +57,9 @@ export async function POST(request: Request) {
         throw new Error('Failed to create GTM container.');
     }
 
-    // 6. Criar um "domain" para o container
-    // O GTM API agora exige que um domínio seja associado ao container web
-     await tagmanager.accounts.containers.workspaces.create({
-      parent: `accounts/${tagmageAccount.accountId}/containers/${newContainer.containerId}`,
+    // 6. Criar um workspace padrão
+    await tagmanager.accounts.containers.workspaces.create({
+      parent: `accounts/${firstAccount.accountId}/containers/${newContainer.containerId}`,
       requestBody: {
         name: `Default Workspace for ${project.url}`
       }

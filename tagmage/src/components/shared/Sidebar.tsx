@@ -46,7 +46,7 @@ export default function Sidebar() {
                       pathname.startsWith(item.href)
                         ? 'bg-[#008EF9] text-white'
                         : 'text-gray-700 hover:text-[#008EF9] hover:bg-gray-50',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
                     )}
                   >
                     <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
@@ -66,7 +66,7 @@ export default function Sidebar() {
                         pathname.startsWith(item.href)
                             ? 'bg-[#008EF9] text-white'
                             : 'text-gray-700 hover:text-[#008EF9] hover:bg-gray-50',
-                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
                         )}
                     >
                         <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />

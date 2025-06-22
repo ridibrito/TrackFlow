@@ -68,9 +68,7 @@ Retorne apenas um JSON válido com a seguinte estrutura:
   }
 }`;
 
-    const result = await geminiService.model.generateContent(prompt);
-    const response = await result.response;
-    const jsonText = response.text();
+    const jsonText = await geminiService.generateContent(prompt);
     
     // Tentar extrair JSON da resposta
     const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
