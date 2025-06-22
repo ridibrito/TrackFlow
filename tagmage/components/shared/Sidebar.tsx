@@ -16,11 +16,11 @@ export function Sidebar({ children }: SidebarProps) {
         <div className="flex h-20 items-center justify-center border-b border-gray-200 px-6">
           <Link href="/painel" className="flex items-center space-x-3">
             <Image
-              src="/logo_tagmage.png"
+              src="/logo-ai.svg"
               alt="Tag Mage Logo"
-              width={150}
-              height={100}
-              priority
+              width={110}
+              height={28}
+              className="h-8 w-auto"
             />
           </Link>
         </div>

@@ -18,8 +18,9 @@ export default function Navbar() {
                 <Image
                   src="/logo-ai.svg"
                   alt="Tag Mage Logo"
-                  width={150}
-                  height={40}
+                  width={110}
+                  height={28}
+                  className="h-8 w-auto"
                   priority
                 />
               </Link>
@@ -44,9 +45,9 @@ export default function Navbar() {
               <Image
                 src="/logo-ai.svg"
                 alt="Tag Mage Logo"
-                width={150}
-                height={40}
-                priority
+                width={110}
+                height={28}
+                className="h-8 w-auto"
               />
             </Link>
           </div>
