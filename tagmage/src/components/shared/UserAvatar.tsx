@@ -7,7 +7,11 @@ import { Fragment } from 'react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function UserAvatar() {
+interface UserAvatarProps {
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export default function UserAvatar({ size = 'md' }: UserAvatarProps) {
   const { user, signOut } = useAuth();
   const router = useRouter();
 
@@ -16,10 +20,18 @@ export default function UserAvatar() {
     router.push('/login');
   };
   
+  const sizeClasses = {
+    sm: 'h-8 w-8 text-sm',
+    md: 'h-10 w-10 text-base',
+    lg: 'h-20 w-20 text-3xl',
+  };
+
+  const currentSize = sizeClasses[size];
+
   if (!user) {
     return (
-        <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-          <UserCircleIcon className="h-8 w-8 text-gray-400" />
+        <div className={`rounded-full bg-gray-200 flex items-center justify-center ${currentSize}`}>
+          <UserCircleIcon className={`text-gray-400 w-5/6 h-5/6`} />
         </div>
     );
   }
@@ -32,16 +44,16 @@ export default function UserAvatar() {
     <div className="relative">
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="flex items-center rounded-full bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 hover:bg-gray-200 transition-colors">
+          <Menu.Button className={`flex items-center rounded-full bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 hover:bg-gray-200 transition-colors`}>
             <span className="sr-only">Abrir menu do usuário</span>
             {avatarUrl ? (
                 <img
                     src={avatarUrl}
                     alt={userName}
-                    className="h-10 w-10 rounded-full object-cover"
+                    className={`rounded-full object-cover ${currentSize}`}
                 />
             ) : (
-                <div className="h-10 w-10 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-base">
+                <div className={`bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold ${currentSize}`}>
                     {userInitials}
                 </div>
             )}

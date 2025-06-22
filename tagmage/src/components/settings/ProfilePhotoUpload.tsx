@@ -54,9 +54,6 @@ export default function ProfilePhotoUpload() {
 
       if (updateError) throw updateError;
       
-      // 4. Atualizar o estado do usuário no app
-      await updateUser();
-
       // Resetar o estado
       setPreviewUrl(null);
       setSelectedFile(null);
