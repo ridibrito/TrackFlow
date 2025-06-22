@@ -1,0 +1,86 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+import { AuthProvider, useAuth } from '../../contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Sidebar, SidebarItem } from '@/components/shared/Sidebar';
+import UserAvatar from '@/components/shared/UserAvatar';
+import {
+  HomeIcon,
+  FolderIcon,
+  UsersIcon,
+  Cog6ToothIcon,
+  ArrowRightOnRectangleIcon
+} from '@heroicons/react/24/outline';
+
+const navLinks = [
+  { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Projetos', href: '/projects', icon: FolderIcon },
+  { name: 'Equipe', href: '/team', icon: UsersIcon },
+  { name: 'Configurações', href: '/settings', icon: Cog6ToothIcon },
+];
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AuthProvider>
+      <DashboardLayoutContent>{children}</DashboardLayoutContent>
+    </AuthProvider>
+  );
+}
+
+function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
+  const { signOut } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Sidebar>
+        <div className="flex flex-col justify-between h-full">
+            <nav className="space-y-1 px-2 py-4">
+              {navLinks.map((link) => (
+                <SidebarItem
+                  key={link.name}
+                  href={link.href}
+                  icon={<link.icon className="h-5 w-5" />}
+                  isActive={pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))}
+                >
+                  {link.name}
+                </SidebarItem>
+              ))}
+            </nav>
+            
+            <div className="p-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                    <UserAvatar size="sm" showName={true} />
+                    <button
+                        onClick={handleSignOut}
+                        className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100"
+                        title="Sair"
+                    >
+                        <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                    </button>
+                </div>
+            </div>
+        </div>
+      </Sidebar>
+
+      {/* Main Content */}
+      <div className="pl-64">
+        <main className="p-6 md:p-8">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+} 

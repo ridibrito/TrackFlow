@@ -1,0 +1,26 @@
+<svg width="150" height="40" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="flow-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4F46E5" /> <!-- Indigo-600 -->
+            <stop offset="100%" stop-color="#2563EB" /> <!-- Blue-600 -->
+        </linearGradient>
+    </defs>
+
+    <!-- Icon: Abstract data flow -->
+    <g transform="translate(0, 8)">
+        <!-- Flowing lines -->
+        <path d="M 5 5 C 15 0, 25 10, 35 5" stroke="url(#flow-gradient)" stroke-width="2.5" stroke-linecap="round" fill="none" />
+        <path d="M 5 12 C 15 7, 25 17, 35 12" stroke="url(#flow-gradient)" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <path d="M 5 19 C 15 14, 25 24, 35 19" stroke="url(#flow-gradient)" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+        <!-- AI Nodes -->
+        <circle cx="10" cy="7" r="2" fill="white" stroke="#4F46E5" stroke-width="1"/>
+        <circle cx="20" cy="14.5" r="2" fill="white" stroke="#3B82F6" stroke-width="1"/>
+        <circle cx="30" cy="7" r="2" fill="white" stroke="#2563EB" stroke-width="1"/>
+    </g>
+    
+    <!-- Text: Tag Mage -->
+    <text x="45" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1f2937">
+        Tag Mage
+    </text>
+</svg> 
