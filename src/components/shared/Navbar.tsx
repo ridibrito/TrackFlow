@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import UserAvatar from "./UserAvatar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -16,7 +16,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <Link href="/painel">
                 <Image
-                  src="/logo-ai.svg"
+                  src="/logo_tagMage.png"
                   alt="Tag Mage Logo"
                   width={110}
                   height={28}
@@ -43,7 +43,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/painel">
               <Image
-                src="/logo-ai.svg"
+                src="/logo_tagMage.png"
                 alt="Tag Mage Logo"
                 width={110}
                 height={28}

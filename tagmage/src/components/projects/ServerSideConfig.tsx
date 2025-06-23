@@ -6,8 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Project } from "@/lib/supabase/projects";
 import { Disclosure, Transition } from "@headlessui/react";
 import { CheckCircleIcon, ChevronUpIcon, ServerIcon, GlobeAltIcon } from "@heroicons/react/24/solid";
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 
 interface ServerSideConfigProps {
   project: Project;

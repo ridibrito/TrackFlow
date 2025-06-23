@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Project, updateProject } from '@/lib/supabase/projects';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 interface ConfigurationStepProps {
   project: Project;

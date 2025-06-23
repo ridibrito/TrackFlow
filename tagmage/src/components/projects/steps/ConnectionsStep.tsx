@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 interface ConnectionsStepProps {
   onConnected: () => void;

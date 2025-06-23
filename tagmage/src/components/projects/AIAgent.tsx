@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Project, updateProject } from '@/lib/supabase/projects';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { Button } from '@components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import Image from 'next/image';
 
 interface Message {
@@ -112,8 +112,8 @@ const AIAgent = ({ project, onComplete }: AIAgentProps) => {
         ))}
         {isTyping && <TypingIndicator />}
         <div ref={messagesEndRef} />
-      </div>
-    </div>
+              </div>
+            </div>
   );
 };
 
@@ -149,16 +149,16 @@ const Message = ({ message, onAction, onUserInput }: { message: any; onAction: a
         )}
         {message.showInput && (
           <div className="mt-3 flex gap-2">
-            <input
-              type="text"
-              value={inputValue}
+          <input
+            type="text"
+            value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               className="flex-grow p-2 border rounded-md"
               placeholder="Digite o ID do cliente aqui..."
             />
             <Button onClick={handleSend} size="sm">Enviar</Button>
-          </div>
+        </div>
         )}
       </div>
     </div>

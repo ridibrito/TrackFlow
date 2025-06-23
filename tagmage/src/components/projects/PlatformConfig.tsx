@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Project, updateProject } from "@/lib/supabase/projects";
 import { CheckCircleIcon, ExclamationTriangleIcon, ChevronDownIcon, ChevronRightIcon, EyeIcon, EyeSlashIcon, PencilIcon } from "@heroicons/react/24/solid";
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { Dna, Gem } from 'lucide-react';
 
 interface PlatformConfigProps {
